@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project-web</title>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: #e9e9ee;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: black;
+            color: white;
+        }
+        li {
+            float: left;
+        }
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 16px;
+            text-decoration: none;
+        }
+        li a:hover {
+            background-color: red;
+        }
+        li a i {
+            margin-right: 6px;
+        }
+
+        /* wrapper just for centering the registration card below the nav */
+        .page-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: calc(100vh - 52px); /* roughly accounts for nav height */
+        }
+
+        .card {
+            width: 100%;
+            max-width: 660px;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px 48px 48px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 0 0 4px;
+            display: inline-block;
+            border-bottom: 3px solid #7b6ff0;
+            padding-bottom: 8px;
+        }
+
+        form {
+            margin-top: 28px;
+        }
+
+        .row {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"] {
+            padding: 12px 14px;
+            border: 1px solid #d8d8e0;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            width: 100%;
+        }
+
+        input::placeholder {
+            color: #a8a8b3;
+        }
+
+        input:focus {
+            border-color: #7b6ff0;
+            box-shadow: 0 0 0 3px rgba(123, 111, 240, 0.15);
+        }
+
+        .gender-section {
+            margin-bottom: 28px;
+        }
+
+        .gender-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a1a2e;
+            margin: 8px 0 16px;
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 48px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .radio-option input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #e2e2e8;
+            border: none;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .radio-option input[type="radio"]:checked {
+            background: #7b6ff0;
+            box-shadow: inset 0 0 0 4px #e2e2e8;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #5aa9e6, #8b6fe0, #a05fd9);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            opacity: 0.92;
+        }
+
+        @media (max-width: 560px) {
+            .row { flex-direction: column; gap: 20px; }
+            .card { padding: 28px 24px 32px; }
+            .gender-options { gap: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li><a href="home.html"><i class="fa-solid fa-house"></i>Home</a></li>
+        <li><a href="study-info.html"><i class="fa-solid fa-newspaper"></i>Study-info</a></li>
+        <li><a href="contact.html"><i class="fa-solid fa-phone"></i>Contact Us</a></li>
+        <li><a href="Login.html"><i class="fa-solid fa-info-circle"></i>Login</a></li>
+        <li><a href="help.html"><i class="fa-solid fa-question-circle"></i>Help</a></li>
+    </ul>
+
+    <div class="page-content">
+      <div class="card">
+        <h1>Registration</h1>
+
+        <form>
+          <div class="row">
+            <div class="field">
+              <label for="fullname">Full Name</label>
+              <input type="text" id="fullname" placeholder="Enter your name">
+            </div>
+            <div class="field">
+              <label for="username">Username</label>
+              <input type="text" id="username" placeholder="Enter your username">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="Enter your email">
+            </div>
+            <div class="field">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="Enter your number">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="password">Password</label>
+              <input type="password" id="password" placeholder="Enter your password">
+            </div>
+            <div class="field">
+              <label for="confirm-password">Confirm Password</label>
+              <input type="password" id="confirm-password" placeholder="Confirm your password">
+            </div>
+          </div>
+
+          <div class="gender-section">
+            <div class="gender-title">Gender</div>
+            <div class="gender-options">
+              <label class="radio-option">
+                <input type="radio" name="gender" value="male">
+                Male
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="gender" value="female">
+                Female
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="gender" value="prefer-not-to-say">
+                Prefer not to say
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" class="register-btn">Register</button>
+        </form>
+      </div>
+    </div>
+</body>
+</html>
