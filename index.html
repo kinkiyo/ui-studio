@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coars Chicken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1c1712;
+    --charcoal-soft:#241d16;
+    --bone:#f3ecdd;
+    --bone-dim:#e9dfc8;
+    --amber:#e3a008;
+    --amber-deep:#b97c05;
+    --rust:#b4381f;
+    --ink:#2a2119;
+    --muted:#7a6f5e;
+    --line: rgba(42,33,25,0.16);
+    --line-on-dark: rgba(243,236,221,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bone);
+    color:var(--ink);
+    font-family:'Karla',sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,h3,.display{
+    font-family:'Big Shoulders Display',sans-serif;
+    font-weight:800;
+    letter-spacing:0.01em;
+    line-height:0.95;
+    color:var(--ink);
+    margin:0;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  :focus-visible{outline:3px solid var(--amber); outline-offset:2px;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    background:var(--charcoal);
+    color:var(--bone);
+    padding:28px 24px 20px;
+  }
+  .brand-row{
+    text-align:center;
+  }
+  .brand{
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    color:var(--bone);
+    display:inline-block;
+    opacity:0;
+    transform:translateY(6px);
+    animation:brandIn 0.7s ease-out 0.1s forwards;
+  }
+  .brand .flame{color:var(--amber);}
+  @keyframes brandIn{
+    to{opacity:1; transform:translateY(0);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .brand{animation:none; opacity:1; transform:none;}
+  }
+
+  nav{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:6px 4px;
+    margin-top:18px;
+  }
+  nav button{
+    background:none;
+    border:none;
+    color:var(--bone-dim);
+    font-size:0.98rem;
+    padding:8px 16px;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    transition:color 0.15s ease, border-color 0.15s ease;
+  }
+  nav button:hover{color:var(--bone);}
+  nav button.active{
+    color:var(--amber);
+    border-bottom-color:var(--amber);
+  }
+
+  .login-btn{
+    position:absolute;
+    top:26px;
+    right:24px;
+    background:transparent;
+    border:1.5px solid var(--amber);
+    color:var(--amber);
+    padding:9px 18px;
+    font-size:0.92rem;
+    font-weight:600;
+    cursor:pointer;
+    border-radius:2px;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .login-btn:hover{background:var(--amber); color:var(--charcoal);}
+
+  @media (max-width:560px){
+    .login-btn{position:static; display:block; margin:16px auto 0; width:max-content;}
+  }
+
+  /* ---------- Page shell ---------- */
+  main{max-width:1040px; margin:0 auto; padding:0 24px;}
+  .page{display:none; animation:none;}
+  .page.active{display:block;}
+
+  .eyebrow-free-title{
+    font-size:clamp(1.6rem, 3.4vw, 2.4rem);
+    margin-bottom:10px;
+  }
+  .lede{
+    color:var(--muted);
+    max-width:56ch;
+    font-size:1.05rem;
+  }
+
+  /* ---------- Buttons (structural CTA signature: hard offset shadow) ---------- */
+  .btn-primary{
+    display:inline-block;
+    background:var(--amber);
+    color:var(--charcoal);
+    border:1.5px solid var(--charcoal);
+    font-weight:700;
+    padding:12px 24px;
+    font-size:1rem;
+    cursor:pointer;
+    box-shadow:5px 5px 0 var(--charcoal);
+    transition:transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .btn-primary:hover{
+    transform:translate(-2px,-2px);
+    box-shadow:7px 7px 0 var(--charcoal);
+  }
+  .btn-primary:active{
+    transform:translate(0,0);
+    box-shadow:2px 2px 0 var(--charcoal);
+  }
+  .btn-secondary{
+    display:inline-block;
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--ink);
+    font-weight:600;
+    padding:10px 20px;
+    font-size:0.95rem;
+    cursor:pointer;
+  }
+  .btn-secondary:hover{background:var(--ink); color:var(--bone);}
+
+  /* ---------- Home ---------- */
+  .hero{
+    display:grid;
+    grid-template-columns:1.2fr 0.8fr;
+    gap:40px;
+    align-items:center;
+    padding:56px 0 40px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero h1{font-size:clamp(2.4rem, 6vw, 4.2rem);}
+  .hero p{margin-top:18px; color:var(--muted); font-size:1.08rem; max-width:46ch;}
+  .hero .actions{margin-top:28px; display:flex; gap:14px; flex-wrap:wrap;}
+
+  .grate{width:100%; max-width:320px; justify-self:center;}
+
+  .feature-row{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:0;
+    margin:44px 0 56px;
+    border-top:1px solid var(--line);
+  }
+  .feature{
+    padding:26px 20px 26px 0;
+    border-right:1px solid var(--line);
+  }
+  .feature:last-child{border-right:none;}
+  .feature h3{font-size:1.3rem; margin-bottom:8px;}
+  .feature p{color:var(--muted); font-size:0.95rem; margin:0;}
+  .feature .tag{
+    display:inline-block;
+    color:var(--rust);
+    font-weight:700;
+    font-size:0.82rem;
+    margin-bottom:10px;
+  }
+
+  @media (max-width:720px){
+    .hero{grid-template-columns:1fr; padding-top:40px;}
+    .grate{order:-1; max-width:220px;}
+    .feature-row{grid-template-columns:1fr;}
+    .feature{border-right:none; border-bottom:1px solid var(--line);}
+  }
+
+  /* ---------- Menu ---------- */
+  .menu-section{margin:44px 0;}
+  .menu-section h2{font-size:1.7rem; border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:6px;}
+  .menu-item{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    padding:16px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .menu-item .name{font-weight:700; font-size:1.05rem;}
+  .menu-item .desc{color:var(--muted); font-size:0.92rem; margin-top:3px; max-width:52ch;}
+  .menu-item .price{font-weight:700; white-space:nowrap; padding-top:2px;}
+
+  /* ---------- About ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    margin:44px 0 56px;
+  }
+  .about-grid p{color:var(--ink); margin-bottom:16px;}
+  .about-grid .stat-block{border-top:1px solid var(--line); padding-top:16px;}
+  .stat{margin-bottom:20px;}
+  .stat .num{font-family:'Big Shoulders Display',sans-serif; font-size:2.2rem; color:var(--rust); font-weight:800;}
+  .stat .label{color:var(--muted); font-size:0.9rem;}
+  @media (max-width:720px){.about-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Contact ---------- */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:48px;
+    margin:44px 0 56px;
+  }
+  .contact-info dl{margin:24px 0 0;}
+  .contact-info dt{color:var(--muted); font-size:0.85rem; margin-top:16px;}
+  .contact-info dd{margin:2px 0 0; font-size:1.05rem; font-weight:600;}
+  .hours-table{width:100%; margin-top:24px; border-collapse:collapse; font-size:0.95rem;}
+  .hours-table td{padding:6px 0; border-bottom:1px solid var(--line);}
+  .hours-table td:last-child{text-align:right; color:var(--muted);}
+
+  form .field{margin-bottom:18px;}
+  form label{display:block; font-size:0.88rem; font-weight:600; margin-bottom:6px; color:var(--ink);}
+  form input, form textarea{
+    width:100%;
+    padding:11px 12px;
+    border:1.5px solid var(--line);
+    background:var(--bone);
+    font-family:inherit;
+    font-size:0.98rem;
+    color:var(--ink);
+  }
+  form input:focus, form textarea:focus{border-color:var(--amber);}
+  form textarea{min-height:110px; resize:vertical;}
+  @media (max-width:720px){.contact-grid{grid-template-columns:1fr;}}
+
+  .form-note{
+    margin-top:14px;
+    font-size:0.9rem;
+    color:var(--rust);
+    display:none;
+  }
+  .form-note.show{display:block;}
+
+  /* ---------- Help ---------- */
+  .faq{margin:44px 0 56px;}
+  .faq-item{border-bottom:1px solid var(--line);}
+  .faq-item button{
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    padding:18px 0;
+    font-size:1.05rem;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:var(--ink);
+  }
+  .faq-item .mark{color:var(--amber); font-size:1.2rem; font-weight:800;}
+  .faq-item .answer{
+    max-height:0;
+    overflow:hidden;
+    color:var(--muted);
+    transition:max-height 0.2s ease;
+  }
+  .faq-item.open .answer{max-height:200px; padding-bottom:18px;}
+
+  /* ---------- Auth pages ---------- */
+  .auth-wrap{
+    max-width:400px;
+    margin:56px auto 72px;
+    padding:36px 32px;
+    background:var(--bone);
+    border:1.5px solid var(--ink);
+    box-shadow:6px 6px 0 var(--charcoal);
+  }
+  .auth-wrap h2{font-size:1.8rem; margin-bottom:6px;}
+  .auth-wrap .lede{margin-bottom:26px; font-size:0.95rem;}
+  .auth-wrap .btn-primary{width:100%; text-align:center; margin-top:6px;}
+  .auth-switch{
+    margin-top:20px;
+    font-size:0.9rem;
+    color:var(--muted);
+    text-align:center;
+  }
+  .auth-switch button{
+    background:none; border:none; color:var(--rust); font-weight:700; cursor:pointer; padding:0; font-size:0.9rem;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--charcoal);
+    color:var(--bone-dim);
+    margin-top:60px;
+    padding:36px 24px;
+    font-size:0.88rem;
+  }
+  footer .foot-inner{max-width:1040px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+  footer .foot-brand{font-family:'Big Shoulders Display',sans-serif; font-size:1.2rem; color:var(--bone); font-weight:700;}
+</style>
+</head>
+<body>
+
+<header>
+  <button class="login-btn" onclick="showPage('login')">Log in</button>
+  <div class="brand-row">
+    <span class="brand display">COARS <span class="flame">CHICKEN</span></span>
+  </div>
+  <nav>
+    <button data-page="home" class="active" onclick="showPage('home')">Home</button>
+    <button data-page="menu" onclick="showPage('menu')">Menu</button>
+    <button data-page="about" onclick="showPage('about')">About Us</button>
+    <button data-page="contact" onclick="showPage('contact')">Contact</button>
+    <button data-page="help" onclick="showPage('help')">Help</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HOME -->
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div>
+        <h1>Char-grilled,<br>never fried.</h1>
+        <p>Coars Chicken smokes every bird over live oak, low and slow, then finishes it hot over open flame for a crackling skin and a smoke ring you can see from across the table.</p>
+        <div class="actions">
+          <button class="btn-primary" onclick="showPage('menu')">View the menu</button>
+          <button class="btn-secondary" onclick="showPage('contact')">Find a location</button>
+        </div>
+      </div>
+      <svg class="grate" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="100" cy="100" r="92" stroke="#2A2119" stroke-width="2" opacity="0.15"/>
+        <circle cx="100" cy="100" r="70" stroke="#2A2119" stroke-width="2" opacity="0.2"/>
+        <circle cx="100" cy="100" r="48" stroke="#B4381F" stroke-width="2.5"/>
+        <line x1="20" y1="100" x2="180" y2="100" stroke="#2A2119" stroke-width="2" opacity="0.15"/>
+        <line x1="100" y1="20" x2="100" y2="180" stroke="#2A2119" stroke-width="2" opacity="0.15"/>
+        <circle cx="100" cy="100" r="14" fill="#E3A008"/>
+      </svg>
+    </div>
+
+    <div class="feature-row">
+      <div class="feature">
+        <span class="tag">House favorite</span>
+        <h3>Smoked Half Chicken</h3>
+        <p>Brined 12 hours, smoked over oak, finished on the grill for crisp skin.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Fan favorite</span>
+        <h3>Nashville Hot Tenders</h3>
+        <p>Hand-breaded, fried once, and brushed with our cayenne-butter glaze.</p>
+      </div>
+      <div class="feature">
+        <span class="tag">Shareable</span>
+        <h3>Charred Wings</h3>
+        <p>Tossed in smoked chili honey and finished over open flame.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU -->
+  <section id="page-menu" class="page">
+    <h2 class="eyebrow-free-title">Menu</h2>
+    <p class="lede">Placeholder menu — prices and items shown here are examples and can be updated with your real offerings.</p>
+
+    <div class="menu-section">
+      <h2>Whole &amp; half birds</h2>
+      <div class="menu-item">
+        <div><div class="name">Smoked Half Chicken</div><div class="desc">Oak-smoked, grill-finished, served with pan drippings.</div></div>
+        <div class="price">$14.50</div>
+      </div>
+      <div class="menu-item">
+        <div><div class="name">Whole Bird, Family Style</div><div class="desc">Feeds 3–4, comes with two sides of your choice.</div></div>
+        <div class="price">$28.00</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Tenders &amp; wings</h2>
+      <div class="menu-item">
+        <div><div class="name">Nashville Hot Tenders (4pc)</div><div class="desc">Choose mild, hot, or "ember" heat level.</div></div>
+        <div class="price">$11.00</div>
+      </div>
+      <div class="menu-item">
+        <div><div class="name">Charred Wings (8pc)</div><div class="desc">Smoked chili honey glaze, char-grilled to order.</div></div>
+        <div class="price">$12.50</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Sides</h2>
+      <div class="menu-item">
+        <div><div class="name">Skillet Cornbread</div><div class="desc">Served warm with honey butter.</div></div>
+        <div class="price">$4.50</div>
+      </div>
+      <div class="menu-item">
+        <div><div class="name">Charred Street Corn</div><div class="desc">Cotija, lime, smoked chili powder.</div></div>
+        <div class="price">$5.00</div>
+      </div>
+      <div class="menu-item">
+        <div><div class="name">Collard Greens</div><div class="desc">Slow-braised with smoked ham hock.</div></div>
+        <div class="price">$4.50</div>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <h2>Drinks</h2>
+      <div class="menu-item">
+        <div><div class="name">House Sweet Tea</div><div class="desc">Brewed daily, refills included.</div></div>
+        <div class="price">$3.00</div>
+      </div>
+      <div class="menu-item">
+        <div><div class="name">Smoked Lemonade</div><div class="desc">Fresh-squeezed with a smoked simple syrup.</div></div>
+        <div class="price">$4.00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="page-about" class="page">
+    <h2 class="eyebrow-free-title">About us</h2>
+    <p class="lede">Placeholder story content — replace with your restaurant's real background.</p>
+
+    <div class="about-grid">
+      <div>
+        <p>Coars Chicken started as a single smoker parked behind a hardware store. The idea was simple: cook chicken the way you'd cook it for family, over real wood, with no shortcuts.</p>
+        <p>Every bird is brined overnight, smoked low and slow, then finished over open flame to get a crisp, charred skin. Our sauces and rubs are all made in-house, in small batches, every morning.</p>
+        <p>Today we're still doing it the same way — one smoker, one grill, and a lot of patience.</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat"><div class="num">12 hrs</div><div class="label">Average brine time</div></div>
+        <div class="stat"><div class="num">100%</div><div class="label">Oak-fired, no gas shortcuts</div></div>
+        <div class="stat"><div class="num">Est. 2019</div><div class="label">Family owned and operated</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="page-contact" class="page">
+    <h2 class="eyebrow-free-title">Contact</h2>
+    <p class="lede">Placeholder contact details — swap in your real address, number, and hours.</p>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <dl>
+          <dt>Address</dt>
+          <dd>418 Ember Street, Riverton</dd>
+          <dt>Phone</dt>
+          <dd>(555) 013-2847</dd>
+          <dt>Email</dt>
+          <dd>hello@coarschicken.example</dd>
+        </dl>
+        <table class="hours-table">
+          <tr><td>Mon – Thu</td><td>11:00 am – 9:00 pm</td></tr>
+          <tr><td>Fri – Sat</td><td>11:00 am – 10:00 pm</td></tr>
+          <tr><td>Sunday</td><td>12:00 pm – 8:00 pm</td></tr>
+        </table>
+      </div>
+      <form onsubmit="handleContact(event)">
+        <div class="field">
+          <label for="c-name">Name</label>
+          <input id="c-name" type="text" required>
+        </div>
+        <div class="field">
+          <label for="c-email">Email</label>
+          <input id="c-email" type="email" required>
+        </div>
+        <div class="field">
+          <label for="c-msg">Message</label>
+          <textarea id="c-msg" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Send message</button>
+        <p class="form-note" id="contact-note">This is a demo form — no message was actually sent.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- HELP -->
+  <section id="page-help" class="page">
+    <h2 class="eyebrow-free-title">Help</h2>
+    <p class="lede">Placeholder answers to common questions.</p>
+
+    <div class="faq">
+      <div class="faq-item">
+        <button onclick="toggleFaq(this)">Do you take reservations?<span class="mark">+</span></button>
+        <div class="answer">We hold walk-in seating only on weekdays. Weekend parties of 6 or more can call ahead.</div>
+      </div>
+      <div class="faq-item">
+        <button onclick="toggleFaq(this)">Do you offer delivery?<span class="mark">+</span></button>
+        <div class="answer">Yes, through our site or major delivery apps within a 5 mile radius.</div>
+      </div>
+      <div class="faq-item">
+        <button onclick="toggleFaq(this)">Is anything on the menu gluten-free?<span class="mark">+</span></button>
+        <div class="answer">Our smoked half chicken and most sides are gluten-free. Ask your server for a full list.</div>
+      </div>
+      <div class="faq-item">
+        <button onclick="toggleFaq(this)">Do you cater events?<span class="mark">+</span></button>
+        <div class="answer">Yes, we cater parties of 10 or more with 48 hours notice. Reach out through the contact page.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGIN -->
+  <section id="page-login" class="page">
+    <div class="auth-wrap">
+      <h2>Log in</h2>
+      <p class="lede">Placeholder login — no real account is created or verified.</p>
+      <form onsubmit="handleAuth(event, 'login')">
+        <div class="field">
+          <label for="l-user">Username</label>
+          <input id="l-user" type="text" required>
+        </div>
+        <div class="field">
+          <label for="l-pass">Password</label>
+          <input id="l-pass" type="password" required>
+        </div>
+        <button type="submit" class="btn-primary">Log in</button>
+        <p class="form-note" id="login-note">This is a demo — no real login occurred.</p>
+      </form>
+      <div class="auth-switch">
+        Don't have an account? <button onclick="showPage('register')">Register</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section id="page-register" class="page">
+    <div class="auth-wrap">
+      <h2>Create account</h2>
+      <p class="lede">Placeholder registration — no real account is created.</p>
+      <form onsubmit="handleAuth(event, 'register')">
+        <div class="field">
+          <label for="r-contact">Email or phone</label>
+          <input id="r-contact" type="text" required>
+        </div>
+        <div class="field">
+          <label for="r-user">Username</label>
+          <input id="r-user" type="text" required>
+        </div>
+        <div class="field">
+          <label for="r-pass">Password</label>
+          <input id="r-pass" type="password" required>
+        </div>
+        <button type="submit" class="btn-primary">Create account</button>
+        <p class="form-note" id="register-note">This is a demo — no real account was created.</p>
+      </form>
+      <div class="auth-switch">
+        Already have an account? <button onclick="showPage('login')">Log in</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">Coars Chicken</div>
+    <div>418 Ember Street, Riverton &nbsp;•&nbsp; (555) 013-2847</div>
+  </div>
+</footer>
+
+<script>
+  const navButtons = document.querySelectorAll('nav button');
+
+  function showPage(name){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+
+    navButtons.forEach(b => b.classList.toggle('active', b.dataset.page === name));
+
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function toggleFaq(btn){
+    btn.parentElement.classList.toggle('open');
+  }
+
+  function handleContact(e){
+    e.preventDefault();
+    document.getElementById('contact-note').classList.add('show');
+  }
+
+  function handleAuth(e, type){
+    e.preventDefault();
+    document.getElementById(type + '-note').classList.add('show');
+  }
+</script>
+
+</body>
+</html>
